@@ -1,7 +1,10 @@
 #! /usr/bin/env python3
+# diff_seq_match_play.py
+# David Prager Branner
+# 20140626
 
 """
-SequenceMatcher component of module difflib -- compute deltas between objects.
+Module difflib, edited for visualization of its workings.
 
 Class SequenceMatcher:
     A flexible class for comparing pairs of sequences of any type.
@@ -526,8 +529,8 @@ class SequenceMatcher:
 
 
 def _test():
-    import doctest, difflib
-    return doctest.testmod(difflib)
+    # import doctest, difflib
+    return # doctest.testmod(difflib)
 
 if __name__ == "__main__":
     _test()
