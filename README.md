@@ -22,4 +22,8 @@ Visualize the workings of the `difflib` module.
 
    The program will display the successive matches of elements of the sequences L1 and L2 (etc). Then it will display the final blocks found. Both displays will have the matching portions shown in the context of the full, original sequences.
 
+### Next steps
+
+ 1. Uncorrected Flask material, including some directories, has been added. This material came from another project and is not in working form.
+
 [end]
