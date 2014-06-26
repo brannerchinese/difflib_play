@@ -376,6 +376,7 @@ class SequenceMatcher:
             newj2len = {}
             for j in b2j.get(a[i], nothing):
                 # a[i] matches b[j]
+#                print('i:', i, 'a[i]:', a[i], 'j:', j, 'b[j]:', b[j])
                 if j < blo:
                     continue
                 if j >= bhi:
@@ -383,7 +384,7 @@ class SequenceMatcher:
                 k = newj2len[j] = j2lenget(j-1, 0) + 1
                 if k > bestsize:
                     besti, bestj, bestsize = i-k+1, j-k+1, k
-                    display.values.append((besti, bestj, bestsize)) # dpb
+                display.values.append((besti, bestj, bestsize)) # dpb
             j2len = newj2len
 
         # Extend the best by non-junk elements on each end.  In particular,
@@ -419,7 +420,7 @@ class SequenceMatcher:
             bestsize = bestsize + 1
             display.values.append((besti, bestj, bestsize)) # dpb
 
-        display.display_terminal() # dpb
+        display.display_values_terminal() # dpb
 
         return Match(besti, bestj, bestsize)
 
@@ -463,6 +464,8 @@ class SequenceMatcher:
             # a[i+k:ahi] vs b[j+k:bhi] unknown
             if k:   # if k is 0, there was no matching block
                 matching_blocks.append(x)
+                display.blocks.append(x)
+#                print('{}\n{}\n\n'.format(self.a[i:i+k], self.b[j:j+k])) # dpb
                 if alo < i and blo < j:
                     queue.append((alo, i, blo, j))
                 if i+k < ahi and j+k < bhi:
@@ -493,7 +496,7 @@ class SequenceMatcher:
 
         non_adjacent.append( (la, lb, 0) )
         self.matching_blocks = non_adjacent
-        display.display_terminal() # dpb
+        display.display_blocks_terminal() # dpb
 #        return [Match(*block) for block in self.matching_blocks]
         return map(Match._make, self.matching_blocks)
 
