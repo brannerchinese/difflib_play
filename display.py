@@ -13,6 +13,8 @@ class Display():
         self.formattedvalues = []
         self.blocks = []
         self.formattedblocks = []
+        self.ansi_i = '\033[4;37;31m'
+        self.ansi_o = '\033[0m'
 
     def display_values_terminal(self):
         """Display matching blocks in the terminal as they accumulate."""
@@ -27,10 +29,10 @@ class Display():
             i, j, k = value
             # Prepare pairs of sentences.
             self.formattedvalues.append(
-                    (''.join([str(a[0:i]), '\033[5;41;32m',
-                        str(a[i:i+k]), '\033[0m', str(a[i+k:])]),
-                    ''.join([str(b[0:j]), '\033[5;41;32m',
-                        str(b[j:j+k]), '\033[0m', str(b[j+k:])]))
+                    (''.join([str(k), ': ', str(a[0:i]), self.ansi_i,
+                        str(a[i:i+k]), self.ansi_o, str(a[i+k:])]),
+                    ''.join([str(k), ': ', str(b[0:j]), self.ansi_i,
+                        str(b[j:j+k]), self.ansi_o, str(b[j+k:])]))
                     )
         for item in self.formattedvalues:
             print('{}\n{}\n\n)'.format(*item))
@@ -45,10 +47,10 @@ class Display():
             i, j, k = block
             # Prepare pairs of sentences.
             self.formattedblocks.append(
-                    (''.join([str(a[0:i]), '\033[5;41;32m',
-                        str(a[i:i+k]), '\033[0m', str(a[i+k:])]),
-                    ''.join([str(b[0:j]), '\033[5;41;32m',
-                        str(b[j:j+k]), '\033[0m', str(b[j+k:])]))
+                    (''.join([str(k), ': ', str(a[0:i]), self.ansi_i,
+                        str(a[i:i+k]), self.ansi_o, str(a[i+k:])]),
+                    ''.join([str(k), ': ', str(b[0:j]), self.ansi_i,
+                        str(b[j:j+k]), self.ansi_o, str(b[j+k:])]))
                     )
         for item in self.formattedblocks:
             print('{}\n{}\n\n)'.format(*item))
