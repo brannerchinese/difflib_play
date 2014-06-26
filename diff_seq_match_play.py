@@ -376,7 +376,6 @@ class SequenceMatcher:
             newj2len = {}
             for j in b2j.get(a[i], nothing):
                 # a[i] matches b[j]
-#                print('i:', i, 'a[i]:', a[i], 'j:', j, 'b[j]:', b[j])
                 if j < blo:
                     continue
                 if j >= bhi:
