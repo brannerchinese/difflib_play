@@ -10,9 +10,9 @@ Class SequenceMatcher:
 __all__ = ['SequenceMatcher', 'IS_CHARACTER_JUNK', 'IS_LINE_JUNK',
            'context_diff', 'Match']
 
-import warnings
 import heapq
 from collections import namedtuple as _namedtuple
+import display as D # dpb
 
 Match = _namedtuple('Match', 'a b size')
 
@@ -360,8 +360,9 @@ class SequenceMatcher:
         # "it's obvious" that someone inserted "ac" at the front.
         # Windiff ends up at the same place as diff, but by pairing up
         # the unique 'b's and then matching the first two 'a's.
-
+        
         a, b, b2j, isbjunk = self.a, self.b, self.b2j, self.bjunk.__contains__
+        display = D.Display(a, b) # dpb
         besti, bestj, bestsize = alo, blo, 0
         # find longest junk-free match
         # during an iteration of the loop, j2len[j] = length of longest
@@ -382,6 +383,7 @@ class SequenceMatcher:
                 k = newj2len[j] = j2lenget(j-1, 0) + 1
                 if k > bestsize:
                     besti, bestj, bestsize = i-k+1, j-k+1, k
+                    display.values.append((besti, bestj, bestsize)) # dpb
             j2len = newj2len
 
         # Extend the best by non-junk elements on each end.  In particular,
@@ -392,10 +394,12 @@ class SequenceMatcher:
               not isbjunk(b[bestj-1]) and \
               a[besti-1] == b[bestj-1]:
             besti, bestj, bestsize = besti-1, bestj-1, bestsize+1
+            display.values.append((besti, bestj, bestsize)) # dpb
         while besti+bestsize < ahi and bestj+bestsize < bhi and \
               not isbjunk(b[bestj+bestsize]) and \
               a[besti+bestsize] == b[bestj+bestsize]:
             bestsize += 1
+            display.values.append((besti, bestj, bestsize)) # dpb
 
         # Now that we have a wholly interesting match (albeit possibly
         # empty!), we may as well suck up the matching junk on each
@@ -408,10 +412,14 @@ class SequenceMatcher:
               isbjunk(b[bestj-1]) and \
               a[besti-1] == b[bestj-1]:
             besti, bestj, bestsize = besti-1, bestj-1, bestsize+1
+            display.values.append((besti, bestj, bestsize)) # dpb
         while besti+bestsize < ahi and bestj+bestsize < bhi and \
               isbjunk(b[bestj+bestsize]) and \
               a[besti+bestsize] == b[bestj+bestsize]:
             bestsize = bestsize + 1
+            display.values.append((besti, bestj, bestsize)) # dpb
+
+        display.display_terminal() # dpb
 
         return Match(besti, bestj, bestsize)
 
@@ -437,6 +445,7 @@ class SequenceMatcher:
         if self.matching_blocks is not None:
             return self.matching_blocks
         la, lb = len(self.a), len(self.b)
+        display = D.Display(self.a, self.b) # dpb
 
         # This is most naturally expressed as a recursive algorithm, but
         # at least one user bumped into extreme use cases that exceeded
@@ -484,6 +493,8 @@ class SequenceMatcher:
 
         non_adjacent.append( (la, lb, 0) )
         self.matching_blocks = non_adjacent
+        display.display_terminal() # dpb
+#        return [Match(*block) for block in self.matching_blocks]
         return map(Match._make, self.matching_blocks)
 
     def ratio(self):
